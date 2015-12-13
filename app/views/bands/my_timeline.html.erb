@@ -1,0 +1,45 @@
+<div class="page-header">
+  <h2>
+    My Friends' Bands
+  </h2>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-striped table-hover">
+      <tr>
+        <th>Band</th>
+        <th>Friend</th>
+        <th># of Times Seen in Concert</th>
+        <th>Save</th>
+      </tr>
+
+      <% @bands.each do |timelineband| %>
+      <tr>
+        <td><%= link_to timelineband.name, "/bands/#{timelineband.id}" %></td>
+        <td><%= link_to timelineband.user.username, "/users/#{timelineband.user.id}" %></td>
+        <td><%= timelineband.concerts.count %></td>
+        <td>
+          <% savedband = Savedband.find_by(:band_id => timelineband.id, :user_id => current_user.id) %>
+          <% if savedband.present? %>
+            <a href="/delete_savedband/<%=savedband.id%>" class="btn btn-warning">Unsave</a>
+          <%else%>
+          <form action="/create_savedband" method="post">
+              <!-- Hidden input for authenticity token to protect from forgery -->
+              <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+              <input type="hidden" name="band_id" value="<%= timelineband.id %>">
+
+              <input type="hidden" name="user_id" value="<%= current_user.id %>">
+
+              <button class="btn btn-warning">
+                <i class="fa fa-heart-o"></i>
+              </button>
+            </form>
+          <%end%>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

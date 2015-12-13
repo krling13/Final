@@ -1,0 +1,104 @@
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="jumbotron">
+      <h3>
+        <%= @user.username %>
+      </h3>
+
+      <div class="row">
+        <div class="col-md-2">
+          <% friend_request = FriendRequest.find_by(:sender_id => current_user.id, :receiver_id => @user.id) %>
+          <% if friend_request.present? %>
+            <a href="/delete_friend_request/<%= friend_request.id %>" class="btn btn-success btn-block">
+              Following
+            </a>
+          <% else %>
+            <form action="/create_friend_request" method="post">
+              <!-- Hidden input for authenticity token to protect from forgery -->
+              <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+              <input type="hidden" id="sender_id" name="sender_id" value="<%= current_user.id %>">
+
+              <input type="hidden" id="receiver_id" name="receiver_id" value="<%= @user.id %>">
+
+              <button class="btn btn-default btn-block">
+                Follow
+              </button>
+            </form>
+          <% end %>
+        </div>
+
+        <div class="col-md-2">
+          <p class="lead">
+            <%= @user.concerts.count %> concerts
+          </p>
+        </div>
+
+        <div class="col-md-2">
+          <p class="lead">
+            <%= @user.bands.count %> bands
+          </p>
+        </div>
+
+        <div class="col-md-2">
+          <p class="lead">
+            <%= @user.venues.count %> venues
+          </p>
+        </div>
+
+        <div class="col-md-2">
+          <p class="lead">
+            <%= @user.friends_where_receiver.count %> followers
+          </p>
+        </div>
+
+        <div class="col-md-2">
+          <p class="lead">
+            <%= @user.friends_where_sender.count %> following
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% if @user == current_user %>
+<div class="page-header">
+  <h3>
+    Bands <%= @user.username %> has seen
+    <a href="/bands/new" class="btn btn-lg btn-success">Add Band</a>
+  </h3>
+</div>
+<% end %>
+
+<div class="row">
+  <div class="col-md-12">
+
+    <table class="table table-striped table-hover">
+      <tr>
+        <th>Band</th>
+        <th>City</th>
+        <th>Bio</th>
+        <% if @user.id==current_user.id %>
+        <th>Actions</th>
+        <%end%>
+      </tr>
+
+      <% @user.bands.each do |ban| %>
+      <tr>
+        <td><%= link_to ban.name, "/bands/#{ban.id}" %></td>
+        <td><%= ban.city %></td>
+        <td><%= ban.bio %></td>
+        <td>
+          <% if ban.user_id==current_user.id %>
+          <a href="/bands/<%= ban.id %>" class="btn btn-primary">Show</a>
+          <a href="/bands/<%= ban.id %>/edit" class="btn btn-warning">Edit</a>
+          <a href="/delete_band/<%= ban.id %>" class="btn btn-danger" rel="nofollow">Delete</a>
+        </td>
+        <%end%>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+

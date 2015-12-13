@@ -1,0 +1,69 @@
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <!-- Validation failure messages -->
+    <% if @band.errors.any? %>
+      <% @band.errors.full_messages.each do |message| %>
+        <div class="alert alert-dismissable alert-danger">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <%= message %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          Edit Band
+        </h3>
+      </div>
+
+      <div class="panel-body">
+        <form action="/update_band/<%= @band.id %>" method="post">
+          <!-- Hidden input for authenticity token to protect from forgery -->
+          <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+          <!-- Label and input for name -->
+          <div class="form-group">
+            <label for="name" class="control-label">
+              Name
+            </label>
+
+            <input id="name" name="name" placeholder="Add the Band name..." class="form-control" value="<%= @band.name %>">
+          </div>
+
+          <!-- Label and input for city -->
+          <div class="form-group">
+            <label for="city" class="control-label">
+              Name
+            </label>
+
+            <input id="city" name="city" placeholder="City they're from..." class="form-control" value="<%= @band.city %>">
+          </div>
+
+          <!-- Label and input for bio -->
+          <div class="form-group">
+            <label for="bio" class="control-label">
+              Name
+            </label>
+
+            <input id="bio" name="bio" placeholder="Band bio..." class="form-control" value="<%= @band.bio %>">
+          </div>
+
+          <input type="hidden" id="user_id" name="user_id" value="<%= current_user.id %>">
+
+          <div class="form-group">
+            <button class="btn btn-success btn-block">
+              Update Band
+            </button>
+          </div>
+
+          <div class="form-group">
+            <a href="/bands/<%= @band.id %>" class="btn btn-link btn-block">
+              Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

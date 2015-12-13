@@ -1,0 +1,68 @@
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <!-- Validation failure messages -->
+    <% if @concert.errors.any? %>
+      <% @concert.errors.full_messages.each do |message| %>
+        <div class="alert alert-dismissable alert-danger">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <%= message %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          Edit Concert
+        </h3>
+      </div>
+
+      <div class="panel-body">
+        <form action="/update_concert/<%= @concert.id %>" method="post">
+          <!-- Hidden input for authenticity token to protect from forgery -->
+          <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+          <!-- Label and input for concertdate -->
+          <div class="form-group">
+            <label for="concertdate" class="control-label">
+              Concert Date
+            </label>
+
+            <input id="concertdate" name="concertdate" placeholder="Add the date of the concert..." class="form-control" value="<%= @concert.concertdate %>">
+          </div>
+      <!-- Label and input for band_id -->
+      <div class="form-group">
+        <label for="band_id" class="control-label">
+          Band
+        </label>
+
+        <%= select_tag(:band_id, options_from_collection_for_select(Band.order("name ASC"), :id, :name, @concert.band_id), :class => "form-control") %>
+      </div>
+
+      <!-- Label and input for venue_id -->
+      <div class="form-group">
+        <label for="venue_id" class="control-label">
+          Venue
+        </label>
+
+        <%= select_tag(:venue_id, options_from_collection_for_select(Venue.order("name ASC"), :id, :name, @concert.venue_id), :class => "form-control") %>
+      </div>
+
+          <input type="hidden" id="user_id" name="user_id" value="<%= current_user.id %>">
+
+          <div class="form-group">
+            <button class="btn btn-success btn-block">
+              Update Concert
+            </button>
+          </div>
+
+          <div class="form-group">
+            <a href="/concerts" class="btn btn-link btn-block">
+              Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

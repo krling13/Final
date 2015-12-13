@@ -1,0 +1,34 @@
+<div class="page-header">
+  <h2>
+    My Concerts
+    <a href="/concerts/new" class="btn btn-lg btn-success">Add Concert</a>
+  </h2>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-striped table-hover">
+      <tr>
+        <th>Date</th>
+        <th>Band</th>
+        <th>Venue</th>
+        <th>Actions</th>
+      </tr>
+
+      <% @concerts.each do |concert| %>
+      <tr>
+        <td><%= concert.concertdate %></td>
+        <td><%= link_to concert.band.name, "/bands/#{concert.band.id}" %></td>
+        <td><%= link_to concert.venue.name, "/venues/#{concert.venue.id}" %></td>
+        <td>
+        <% if concert.user_id==current_user.id %>
+          <a href="/concerts/<%= concert.id %>/edit" class="btn btn-warning">Edit</a>
+          <a href="/delete_concert/<%= concert.id %>" class="btn btn-danger" rel="nofollow">Delete</a>
+        </td>
+        <%end%>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+
